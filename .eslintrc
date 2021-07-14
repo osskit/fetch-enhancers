@@ -1,0 +1,11 @@
+{
+  "extends": ["noamokman", "prettier"],
+  "ignorePatterns": [
+    "src/server/v1/routes.ts",
+    "clients/**",
+    "tests/**"
+  ],
+  "rules": {
+    "@typescript-eslint/no-empty-interface": "off"
+  }
+}

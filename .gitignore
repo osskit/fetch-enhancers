@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.vscode
+.idea/
+.env
+src/server/v1/openapi.json
+src/server/v1/routes.ts
+/clients/typescript-fetch/generated/
+.DS_Store
