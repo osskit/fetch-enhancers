@@ -1,4 +1,4 @@
-import {RequestInit} from 'node-fetch';
+import { RequestInit } from 'node-fetch';
 
 export class FetchRetryError extends Error {
     constructor(
@@ -64,7 +64,7 @@ export const parseError = async (e: any) => {
             }
         }
         if (e instanceof Error) {
-            return {name: e.name, message: e.message, stack: e.stack};
+            return { name: e.name, message: e.message, stack: e.stack };
         }
         return e;
     } catch {

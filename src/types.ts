@@ -1,4 +1,4 @@
-import {Request, RequestInit, Response} from 'node-fetch';
+import { Request, RequestInit, Response } from 'node-fetch';
 export type Fetch = (url: string | Request, init?: RequestInit) => Promise<Response>;
 export type EnhancedFetchRequestInit<T> = RequestInit & {
     enhancers?: T;

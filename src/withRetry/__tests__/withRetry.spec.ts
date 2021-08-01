@@ -1,8 +1,8 @@
-import {createServer} from 'http';
-import {AddressInfo} from 'net';
+import { createServer } from 'http';
+import { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 
-import {withRetry} from '../';
+import { withRetry } from '../';
 
 const retryFetch = withRetry(fetch);
 test('retries upon 500', async () => {
@@ -18,7 +18,7 @@ test('retries upon 500', async () => {
 
     return new Promise<void>((resolve, reject) => {
         server.listen(async () => {
-            const {port} = server.address() as AddressInfo;
+            const { port } = server.address() as AddressInfo;
             try {
                 const res = await retryFetch(`http://127.0.0.1:${port}`);
                 expect(await res.text()).toBe('ha');
@@ -55,7 +55,7 @@ test('resolves on >MAX_RETRIES', async () => {
 
     return new Promise<void>((resolve, reject) => {
         server.listen(async () => {
-            const {port} = server.address() as AddressInfo;
+            const { port } = server.address() as AddressInfo;
             const res = await retryFetch(`http://127.0.0.1:${port}`);
             expect(res.status).toBe(500);
             server.close();

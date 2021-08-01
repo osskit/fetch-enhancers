@@ -1,8 +1,8 @@
-import {createServer} from 'http';
-import {AddressInfo} from 'net';
+import { createServer } from 'http';
+import { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 
-import {withThrow, FetchError} from '..';
+import { withThrow, FetchError } from '..';
 
 test('throws error when fetch fails ', async () => {
     const throwingFetch = withThrow(fetch);
@@ -13,7 +13,7 @@ test('throws error when fetch fails ', async () => {
 
     return new Promise<void>((resolve, reject) => {
         server.listen(async () => {
-            const {port} = server.address() as AddressInfo;
+            const { port } = server.address() as AddressInfo;
             try {
                 await throwingFetch(`http://127.0.0.1:${port}`);
                 reject();

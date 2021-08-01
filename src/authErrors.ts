@@ -1,4 +1,4 @@
-import {Request, RequestInit} from 'node-fetch';
+import { Request, RequestInit } from 'node-fetch';
 
 export class FetchAuthorizationError extends Error {
     constructor(message: string, url: string | Request, requestInit: RequestInit) {

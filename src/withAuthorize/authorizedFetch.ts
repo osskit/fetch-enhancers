@@ -1,5 +1,5 @@
-import {Issuer, Client, TokenSet, custom} from 'openid-client';
-import nodeFetch, {Request, RequestInit, Response} from 'node-fetch';
+import { Issuer, Client, TokenSet, custom } from 'openid-client';
+import nodeFetch, { Request, RequestInit, Response } from 'node-fetch';
 
 const pReflect = async <T>(promise: Promise<T>) => {
     try {
@@ -56,7 +56,7 @@ const getClient = async (issuer: string, clientId: string, clientSecret: string)
 };
 
 const isInvalid = async (tokenPromise: Promise<TokenSet>) => {
-    const {isRejected, value} = await pReflect(tokenPromise);
+    const { isRejected, value } = await pReflect(tokenPromise);
     return isRejected || value?.expired();
 };
 
@@ -90,19 +90,17 @@ export const getAuthenticationToken = async ({
     return token.access_token;
 };
 
-export default (authenticationParams: AuthenticationParams, fetch?: FetchAPI, init: RequestInit = {}) => async (
-    url: string | Request,
-    innerInit: RequestInit = {},
-): Promise<Response> => {
-    const innerFetch = fetch || nodeFetch;
-    const token = await getAuthenticationToken(authenticationParams);
-    return innerFetch(url, {
-        ...innerInit,
-        ...init,
-        headers: {
-            ...innerInit.headers,
-            ...init.headers,
-            Authorization: `Bearer ${token}`,
-        },
-    });
-};
+export default (authenticationParams: AuthenticationParams, fetch?: FetchAPI, init: RequestInit = {}) =>
+    async (url: string | Request, innerInit: RequestInit = {}): Promise<Response> => {
+        const innerFetch = fetch || nodeFetch;
+        const token = await getAuthenticationToken(authenticationParams);
+        return innerFetch(url, {
+            ...innerInit,
+            ...init,
+            headers: {
+                ...innerInit.headers,
+                ...init.headers,
+                Authorization: `Bearer ${token}`,
+            },
+        });
+    };

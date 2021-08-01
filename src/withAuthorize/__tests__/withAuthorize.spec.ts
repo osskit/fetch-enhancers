@@ -1,9 +1,9 @@
-import {createServer} from 'http';
-import {AddressInfo} from 'net';
+import { createServer } from 'http';
+import { AddressInfo } from 'net';
 import fetch from 'node-fetch';
-import {v4 as uuid} from 'uuid';
+import { v4 as uuid } from 'uuid';
 
-import {withAuthorize} from '..';
+import { withAuthorize } from '..';
 
 import mockOidsServer from './mockOidsServer';
 
@@ -25,7 +25,7 @@ test('Server doesnt exist - should fail', async () => {
 
     return new Promise<void>((resolve, reject) => {
         server.listen(async () => {
-            const {port} = server.address() as AddressInfo;
+            const { port } = server.address() as AddressInfo;
             try {
                 await authorizedFetch(`http://127.0.0.1:${port}`);
                 reject();
@@ -58,7 +58,7 @@ test('Server exists - should succeed', async () => {
 
     return new Promise<void>((resolve, reject) => {
         server.listen(async () => {
-            const {port} = server.address() as AddressInfo;
+            const { port } = server.address() as AddressInfo;
             try {
                 const res = await authorizedFetch(`http://127.0.0.1:${port}`);
                 expect(res.status).toBe(200);

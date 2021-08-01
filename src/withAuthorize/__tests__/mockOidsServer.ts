@@ -1,4 +1,4 @@
-const {OAuth2Server} = require('oauth2-mock-server');
+const { OAuth2Server } = require('oauth2-mock-server');
 
 const server = new OAuth2Server();
 
@@ -9,4 +9,4 @@ const mock = async () => {
 
 const stop = () => server.stop();
 
-export default {mock, stop};
+export default { mock, stop };

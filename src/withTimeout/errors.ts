@@ -1,4 +1,4 @@
-import {RequestInit} from 'node-fetch';
+import { RequestInit } from 'node-fetch';
 
 export class FetchTimeoutError extends Error {
     constructor(message: string, url: string, requestInit: RequestInit, timeout: number) {

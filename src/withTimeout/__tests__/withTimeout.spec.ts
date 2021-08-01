@@ -1,8 +1,8 @@
-import {createServer} from 'http';
-import {AddressInfo} from 'net';
+import { createServer } from 'http';
+import { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 
-import {withTimeout, FetchTimeoutError} from '../';
+import { withTimeout, FetchTimeoutError } from '../';
 
 test('single request configuration - times out when server does not respond in time ', async () => {
     const timeoutFetch = withTimeout(fetch);
@@ -15,10 +15,10 @@ test('single request configuration - times out when server does not respond in t
 
     return new Promise<void>((resolve, reject) => {
         server.listen(async () => {
-            const {port} = server.address() as AddressInfo;
+            const { port } = server.address() as AddressInfo;
             try {
                 await timeoutFetch(`http://127.0.0.1:${port}`, {
-                    enhancers: {timeout: {requestTimeoutMs: 100}},
+                    enhancers: { timeout: { requestTimeoutMs: 100 } },
                 });
                 reject();
             } catch (err) {
@@ -33,7 +33,7 @@ test('single request configuration - times out when server does not respond in t
 });
 
 test('global configuration - times out when server does not respond in time ', async () => {
-    const timeoutFetch = withTimeout(fetch, {timeout: {requestTimeoutMs: 100}});
+    const timeoutFetch = withTimeout(fetch, { timeout: { requestTimeoutMs: 100 } });
     const server = createServer((_, res) => {
         setTimeout(() => {
             res.writeHead(200);
@@ -43,7 +43,7 @@ test('global configuration - times out when server does not respond in time ', a
 
     return new Promise<void>((resolve, reject) => {
         server.listen(async () => {
-            const {port} = server.address() as AddressInfo;
+            const { port } = server.address() as AddressInfo;
             try {
                 await timeoutFetch(`http://127.0.0.1:${port}`);
                 reject();
