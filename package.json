@@ -1,9 +1,11 @@
 {
     "name": "@osskit/fetch-enhancers",
     "version": "0.0.2",
+    "repository": {
+      "url": "https://github.com/osskit/monitor"
+    },    
     "main": "./dist/index.js",
     "types": "./dist/types",
-    "license": "MIT",
     "scripts": {
         "build": "tsc",
         "test": "jest",
@@ -50,5 +52,9 @@
         "eslint": "^7.30.0",
         "lodash.clonedeep": "^4.5.0",
         "openid-client": "^4.6.0"
-    }
+    },
+    "lint-staged": {
+      "*.ts": "eslint --fix",
+      "*.{ts,js,json}": "prettier --write"
+  }    
 }
