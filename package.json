@@ -1,7 +1,7 @@
 {
     "name": "@osskit/fetch-enhancers",
     "version": "0.0.2",
-    "main": "./dist/lib/index.js",
+    "main": "./dist/index.js",
     "types": "./dist/types",
     "license": "MIT",
     "scripts": {
