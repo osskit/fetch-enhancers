@@ -11,6 +11,7 @@
         "esModuleInterop": true,
         "resolveJsonModule": false,
         "skipLibCheck": true,
+        "declaration": true,
         "sourceMap": true,
         "forceConsistentCasingInFileNames": true,
         "noImplicitReturns": true,

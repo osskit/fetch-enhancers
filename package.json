@@ -4,8 +4,8 @@
     "repository": {
       "url": "https://github.com/osskit/monitor"
     },    
-    "main": "./dist/index.js",
-    "types": "./dist/types",
+    "main": "dist/index.js",
+    "types": "dist/types",
     "scripts": {
         "build": "tsc",
         "test": "jest",
