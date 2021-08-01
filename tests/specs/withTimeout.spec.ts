@@ -1,21 +1,11 @@
 import { createServer } from 'http';
 import { AddressInfo } from 'net';
-import fetch from 'node-fetch';
-import { v4 as uuid } from 'uuid';
+import fetch, { FetchError } from 'node-fetch';
 
-import { withAuthorize } from '..';
+import { withTimeout } from '../../src/enhancers/withTimeout';
 
-import mockOidsServer from './mockOidsServer';
-
-test('Server doesnt exist - should fail', async () => {
-    const authorizedFetch = withAuthorize(fetch, {
-        authenticationParams: {
-            clientId: uuid(),
-            clientSecret: uuid(),
-            resource: uuid(),
-            issuer: 'http://localhost:8080',
-        },
-    });
+test('single request configuration - times out when server does not respond in time ', async () => {
+    const timeoutFetch = withTimeout(fetch, { requestTimeoutMs: 100 });
     const server = createServer((_, res) => {
         setTimeout(() => {
             res.writeHead(200);
@@ -27,9 +17,10 @@ test('Server doesnt exist - should fail', async () => {
         server.listen(async () => {
             const { port } = server.address() as AddressInfo;
             try {
-                await authorizedFetch(`http://127.0.0.1:${port}`);
+                await timeoutFetch(`http://127.0.0.1:${port}`);
                 reject();
             } catch (err) {
+                expect(err instanceof FetchError).toBeTruthy();
                 resolve();
             } finally {
                 server.close();
@@ -39,16 +30,8 @@ test('Server doesnt exist - should fail', async () => {
     });
 });
 
-test('Server exists - should succeed', async () => {
-    await mockOidsServer.mock();
-    const authorizedFetch = withAuthorize(fetch, {
-        authenticationParams: {
-            clientId: uuid(),
-            clientSecret: uuid(),
-            issuer: 'http://localhost:8080',
-            resource: uuid(),
-        },
-    });
+test('global configuration - times out when server does not respond in time ', async () => {
+    const timeoutFetch = withTimeout(fetch, { requestTimeoutMs: 100 });
     const server = createServer((_, res) => {
         setTimeout(() => {
             res.writeHead(200);
@@ -60,12 +43,11 @@ test('Server exists - should succeed', async () => {
         server.listen(async () => {
             const { port } = server.address() as AddressInfo;
             try {
-                const res = await authorizedFetch(`http://127.0.0.1:${port}`);
-                expect(res.status).toBe(200);
-                mockOidsServer.stop();
-                resolve();
-            } catch (err) {
+                await timeoutFetch(`http://127.0.0.1:${port}`);
                 reject();
+            } catch (err) {
+                expect(err instanceof FetchError).toBeTruthy();
+                resolve();
             } finally {
                 server.close();
             }

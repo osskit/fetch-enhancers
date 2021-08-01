@@ -1,0 +1,21 @@
+import AbortController from 'abort-controller';
+import { FetchError, RequestInfo, RequestInit } from 'node-fetch';
+
+import { Fetch } from '../types';
+
+export type TimeoutOptions = {
+    requestTimeoutMs: number;
+};
+
+export const withTimeout = (fetch: Fetch, options: TimeoutOptions) => async (url: RequestInfo, init?: RequestInit) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), options.requestTimeoutMs);
+
+    try {
+        return await fetch(url, Object.assign({ signal: controller.signal }, init));
+    } catch (err) {
+        throw new FetchError(err.message ?? 'fetch error', '');
+    } finally {
+        clearTimeout(timeoutId);
+    }
+};

@@ -2,9 +2,10 @@ import { createServer } from 'http';
 import { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 
-import { withRetry } from '../';
+import { withRetry } from '../../src/enhancers/withRetry';
 
 const retryFetch = withRetry(fetch);
+
 test('retries upon 500', async () => {
     let i = 0;
     const server = createServer((_, res) => {
@@ -32,22 +33,7 @@ test('retries upon 500', async () => {
     });
 });
 
-test('throws upon ECONNREFUSED', async () => {
-    const expected = {
-        name: 'FetchError',
-        message: 'request to http://127.0.0.1:80/ failed, reason: connect ECONNREFUSED 127.0.0.1:80',
-    };
-
-    try {
-        await retryFetch(`http://127.0.0.1:80`);
-    } catch (err) {
-        expect(err.status).toBeUndefined();
-        expect(err.name).toBe(expected.name);
-        expect(err.message).toBe(expected.message);
-    }
-});
-
-test('resolves on >MAX_RETRIES', async () => {
+test('resolves on > MAX_RETRIES', async () => {
     const server = createServer((_, res) => {
         res.writeHead(500);
         res.end();

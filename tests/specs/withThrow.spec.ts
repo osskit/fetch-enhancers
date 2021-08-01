@@ -1,8 +1,8 @@
 import { createServer } from 'http';
 import { AddressInfo } from 'net';
-import fetch from 'node-fetch';
+import fetch, { FetchError } from 'node-fetch';
 
-import { withThrow, FetchError } from '..';
+import { withThrow } from '../../src/enhancers/withThrow';
 
 test('throws error when fetch fails ', async () => {
     const throwingFetch = withThrow(fetch);
