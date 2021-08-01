@@ -1,13 +1,12 @@
 import retry from 'async-retry';
 import type { RequestInfo, RequestInit } from 'node-fetch';
-import { FetchError } from 'node-fetch';
-import { Fetch } from '../types';
+import { Fetch, FetchError } from '../types';
 
 export type RetryOptions = {
     minTimeout?: number;
     retries?: number;
     factor?: number;
-    onRetry?: (error: Error) => void;
+    onRetry?: (error: FetchError) => void;
 };
 
 export const withRetry =
@@ -24,8 +23,11 @@ export const withRetry =
 
                 const responseText = await response.text();
 
-                throw new FetchError(responseText ?? 'fetch error', '');
+                throw new FetchError(responseText ?? 'fetch error', url.toString(), {
+                    attempt: String(attempt),
+                    status: String(response.status),
+                });
             },
-            { ...options, onRetry: (err) => options.onRetry?.(err) },
+            { ...options, onRetry: (err) => options.onRetry?.(err as FetchError) },
         );
     };

@@ -8,7 +8,7 @@ export const withThrow =
         const response = await fetch(url, init);
         if (!response.ok) {
             const responseText = await response.text();
-            throw new FetchError(responseText ?? 'fetch error', 'throw');
+            throw new FetchError(responseText ?? 'fetch error', url.toString());
         }
         return response;
     };
