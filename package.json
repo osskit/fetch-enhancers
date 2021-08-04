@@ -1,10 +1,10 @@
 {
     "name": "@osskit/fetch-enhancers",
-    "version": "0.0.21",
+    "version": "0.0.22",
     "repository": {
       "url": "https://github.com/osskit/monitor"
     },    
-    "main": "dist/index.js",
+    "main": "dist/src/index.js",
     "scripts": {
         "build": "tsc",
         "test": "jest --runInBand --forceExit --config tests/jest.config.ts",
