@@ -15,6 +15,7 @@ export const withBasicAuth =
         const response = await fetch(url, {
             ...init,
             headers: {
+                ...init?.headers,
                 Authorization: `Basic ${Buffer.from(`${username}:${password}`, 'binary').toString('base64')}`,
             },
         });
