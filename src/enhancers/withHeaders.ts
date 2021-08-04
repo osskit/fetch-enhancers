@@ -1,9 +1,9 @@
-import { Headers, RequestInfo, RequestInit } from 'node-fetch';
+import { RequestInfo, RequestInit } from 'node-fetch';
 
 import { Fetch } from '../types';
 
 export const withHeaders =
-    (fetch: Fetch, headers: Headers): Fetch =>
+    (fetch: Fetch, headers: Record<string, string>): Fetch =>
     (url: RequestInfo, init?: RequestInit) =>
         fetch(url, {
             ...init,
