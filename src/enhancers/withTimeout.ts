@@ -13,8 +13,8 @@ export const withTimeout = (fetch: Fetch, options: TimeoutOptions) => async (url
 
     try {
         return await fetch(url, Object.assign({ signal: controller.signal }, init));
-    } catch (err) {
-        throw new FetchError(err.message ?? 'fetch error', url.toString());
+    } catch (error) {
+        throw new FetchError((error as any).message ?? 'fetch error', url.toString());
     } finally {
         clearTimeout(timeoutId);
     }
