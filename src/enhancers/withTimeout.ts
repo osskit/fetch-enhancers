@@ -1,7 +1,7 @@
 import AbortController from 'abort-controller';
-import { FetchError, RequestInfo, RequestInit } from 'node-fetch';
+import { RequestInfo, RequestInit } from 'node-fetch';
 
-import { Fetch } from '../types';
+import { Fetch, FetchError} from '../types';
 
 export type TimeoutOptions = {
     requestTimeoutMs: number;

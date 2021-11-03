@@ -1,6 +1,5 @@
 import type { RequestInfo, RequestInit } from 'node-fetch';
-import { FetchError } from 'node-fetch';
-import { Fetch } from '../types';
+import { Fetch, FetchError } from '../types';
 
 export const withThrow =
     (fetch: Fetch): Fetch =>

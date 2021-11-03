@@ -1,4 +1,4 @@
-import { RequestInfo, RequestInit } from 'node-fetch';
+import type { RequestInfo, RequestInit } from 'node-fetch';
 
 import { Fetch, FetchError } from '../types';
 

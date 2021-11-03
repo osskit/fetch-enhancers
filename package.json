@@ -1,8 +1,8 @@
 {
     "name": "@osskit/fetch-enhancers",
-    "version": "0.0.28",
+    "version": "1.0.0",
     "repository": {
-        "url": "https://github.com/osskit/monitor"
+        "url": "https://github.com/osskit/fetch-enhancers"
     },
     "main": "dist/src/index.js",
     "scripts": {
