@@ -1,13 +1,14 @@
 import retry from 'async-retry';
 import type { RequestInfo, RequestInit } from 'node-fetch';
-import { Fetch, FetchError } from '../types';
+import type { Fetch} from '../types';
+import { FetchError } from '../types';
 
-export type RetryOptions = {
+export interface RetryOptions {
     minTimeout?: number;
     retries?: number;
     factor?: number;
     onRetry?: (error: FetchError) => void;
-};
+}
 
 export const withRetry =
     (fetch: Fetch, options: RetryOptions = { minTimeout: 10, retries: 3, factor: 5, onRetry: () => {} }): Fetch =>
