@@ -11,24 +11,26 @@ export interface RetryOptions {
 }
 
 export const withRetry =
-    (fetch: Fetch, options: RetryOptions = { minTimeout: 10, retries: 3, factor: 5, onRetry: () => {} }): Fetch =>
+    (fetch: Fetch, options: RetryOptions): Fetch =>
     (url: RequestInfo, init?: RequestInit) => {
-        return retry(
-            async (_bail, attempt) => {
-                const isRetry = attempt < (options.retries ?? 3);
-                const response = await fetch(url, init);
+    const finalOptions = { minTimeout: 10, retries: 3, factor: 5, ...options};
 
-                if (response.status < 500 || response.status >= 600 || !isRetry) {
-                    return response;
-                }
+    return retry(
+        async (_bail, attempt) => {
+                    const isRetry = attempt < (finalOptions.retries ?? 3);
+                    const response = await fetch(url, init);
 
-                const responseText = await response.text();
+                    if (response.status < 500 || response.status >= 600 || !isRetry) {
+                        return response;
+                    }
 
-                throw new FetchError(responseText ?? 'fetch error', url.toString(), {
-                    attempt: String(attempt),
-                    status: String(response.status),
-                });
+                    const responseText = await response.text();
+
+                    throw new FetchError(responseText ?? 'fetch error', JSON.stringify(url), {
+                        attempt: String(attempt),
+                        status: String(response.status),
+                    });
             },
-            { ...options, onRetry: (err) => options.onRetry?.(err as FetchError) },
+            { ...finalOptions, onRetry: (err) => finalOptions.onRetry?.(err as FetchError) },
         );
     };

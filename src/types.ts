@@ -3,8 +3,6 @@ import type { RequestInfo, RequestInit, Response, Request } from 'node-fetch';
 export type Fetch = (url: RequestInfo, init?: RequestInit) => Promise<Response>;
 
 export class FetchError extends Error {
-    message: string;
-
     url: string;
 
     data?: Record<string, string>;
@@ -13,6 +11,7 @@ export class FetchError extends Error {
         super(message);
         this.url = url;
         this.data = data;
+        this.name = 'FetchError';
     }
 }
 
@@ -37,10 +36,10 @@ export type FetchEnhancerWithMandatoryOptions<T1> = <T2 extends {}>(
 export class FetchAuthorizationError extends Error {
     constructor(message: string, url: Request | string, requestInit: RequestInit) {
         super(message);
-        Object.setPrototypeOf(this, FetchAuthorizationError.prototype);
-        this.url = url.toString();
+        this.url = JSON.stringify(url);
         this.requestInit = requestInit;
         this.status = 403;
+        this.name = 'FetchAuthorizationError';
     }
 
     status: number;
