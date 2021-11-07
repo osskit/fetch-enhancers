@@ -17,6 +17,7 @@ export const withBasicAuth =
             ...init,
             headers: {
                 ...init?.headers,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
                 Authorization: `Basic ${Buffer.from(`${username}:${password}`, 'binary').toString('base64')}`,
             },
         });

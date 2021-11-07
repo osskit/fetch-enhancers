@@ -14,6 +14,7 @@ export const authorizedFetch =
             headers: {
                 ...innerInit.headers,
                 ...init.headers,
+                // eslint-disable-next-line @typescript-eslint/naming-convention
                 Authorization: `Bearer ${token}`,
             },
         });
