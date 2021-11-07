@@ -8,8 +8,7 @@ export const authorizedFetch =
         const innerFetch = fetch;
         const token = await getToken();
 
-        
-return innerFetch(url, {
+        return innerFetch(url, {
             ...innerInit,
             ...init,
             headers: {

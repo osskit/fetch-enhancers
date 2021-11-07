@@ -1,6 +1,6 @@
 import retry from 'async-retry';
 import type { RequestInfo, RequestInit } from 'node-fetch';
-import type { Fetch} from '../types';
+import type { Fetch } from '../types';
 import { FetchError } from '../types';
 
 export interface RetryOptions {
