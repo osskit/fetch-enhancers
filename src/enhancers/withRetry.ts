@@ -11,7 +11,7 @@ export interface RetryOptions {
 }
 
 export const withRetry =
-  (fetch: Fetch, options: RetryOptions): Fetch =>
+  (fetch: Fetch, options?: RetryOptions): Fetch =>
   (url: RequestInfo, init?: RequestInit) => {
     const finalOptions = { minTimeout: 10, retries: 3, factor: 5, ...options };
 
