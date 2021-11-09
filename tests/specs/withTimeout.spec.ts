@@ -2,7 +2,7 @@ import { createServer } from 'http';
 import { AddressInfo } from 'net';
 import fetch, { FetchError } from 'node-fetch';
 
-import { withTimeout } from '../../src/enhancers/withTimeout';
+import { withTimeout } from '../../src';
 
 test('single request configuration - times out when server does not respond in time ', async () => {
   const timeoutFetch = withTimeout(fetch, { requestTimeoutMs: 100 });

@@ -2,7 +2,7 @@ import { createServer } from 'http';
 import { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 
-import { withRetry } from '../../src/enhancers/withRetry';
+import { withRetry } from '../../src';
 
 const retryFetch = withRetry(fetch);
 
