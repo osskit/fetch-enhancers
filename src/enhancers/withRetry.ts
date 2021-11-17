@@ -26,10 +26,10 @@ export const withRetry =
 
         const responseText = await response.text();
 
-        throw new FetchError(responseText ?? 'fetch error', JSON.stringify(url), {
+        throw new FetchError({message: responseText ?? 'fetch error', url: JSON.stringify(url), status: response.status, data: {
           attempt: String(attempt),
           status: String(response.status),
-        });
+        }});
       },
       { ...finalOptions, onRetry: (err) => finalOptions.onRetry?.(err as FetchError) },
     );

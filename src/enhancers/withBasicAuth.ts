@@ -25,7 +25,7 @@ export const withBasicAuth =
     if (!response.ok) {
       const responseText = await response.text();
 
-      throw new FetchError(responseText ?? 'fetch error', JSON.stringify(url));
+      throw new FetchError({message: responseText ?? 'fetch error', url: JSON.stringify(url), status: response.status});
     }
 
     return response;
