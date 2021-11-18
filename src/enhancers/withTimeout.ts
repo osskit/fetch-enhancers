@@ -17,7 +17,7 @@ export const withTimeout = (fetch: Fetch, options: TimeoutOptions) => async (url
   try {
     return await fetch(url, { signal: controller.signal, ...init });
   } catch (error) {
-    throw new FetchError((error as Error).message ?? 'fetch error', JSON.stringify(url));
+    throw new FetchError({message: (error as Error).message ?? 'fetch error', url: JSON.stringify(url)});
   } finally {
     clearTimeout(timeoutId);
   }
