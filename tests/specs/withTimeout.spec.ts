@@ -1,11 +1,12 @@
 import { createServer } from 'http';
 import { AddressInfo } from 'net';
-import fetch, { FetchError } from 'node-fetch';
+import fetch from 'node-fetch';
 
-import { withTimeout } from '../../src';
+import { withTimeout, FetchError } from '../../src';
+
+const timeoutFetch = withTimeout(fetch, { requestTimeoutMs: 100 });
 
 test('single request configuration - times out when server does not respond in time ', async () => {
-  const timeoutFetch = withTimeout(fetch, { requestTimeoutMs: 100 });
   const server = createServer((_, res) => {
     setTimeout(() => {
       res.writeHead(200);
@@ -20,7 +21,7 @@ test('single request configuration - times out when server does not respond in t
         await timeoutFetch(`http://127.0.0.1:${port}`);
         reject();
       } catch (err) {
-        expect(err instanceof FetchError).toBeTruthy();
+        expect(err).toBeInstanceOf(FetchError);
         resolve();
       } finally {
         server.close();
@@ -31,7 +32,6 @@ test('single request configuration - times out when server does not respond in t
 });
 
 test('global configuration - times out when server does not respond in time ', async () => {
-  const timeoutFetch = withTimeout(fetch, { requestTimeoutMs: 100 });
   const server = createServer((_, res) => {
     setTimeout(() => {
       res.writeHead(200);
@@ -46,7 +46,7 @@ test('global configuration - times out when server does not respond in time ', a
         await timeoutFetch(`http://127.0.0.1:${port}`);
         reject();
       } catch (err) {
-        expect(err instanceof FetchError).toBeTruthy();
+        expect(err).toBeInstanceOf(FetchError);
         resolve();
       } finally {
         server.close();
