@@ -1,11 +1,12 @@
 import { createServer } from 'http';
 import { AddressInfo } from 'net';
-import fetch, { FetchError } from 'node-fetch';
+import fetch  from 'node-fetch';
 
-import { withThrow } from '../../src';
+import { withThrow, FetchError } from '../../src';
+
+const throwingFetch = withThrow(fetch);
 
 test('throws error when fetch fails ', async () => {
-  const throwingFetch = withThrow(fetch);
   const server = createServer((_, res) => {
     res.writeHead(500);
     res.end();
@@ -18,7 +19,7 @@ test('throws error when fetch fails ', async () => {
         await throwingFetch(`http://127.0.0.1:${port}`);
         reject();
       } catch (err) {
-        expect(err instanceof FetchError).toBeTruthy();
+        expect(err).toBeInstanceOf(FetchError);
         resolve();
       } finally {
         server.close();
