@@ -33,3 +33,4 @@ test('throws error when fetch fails ', async () => {
     server.on('error', reject);
   });
 });
+
