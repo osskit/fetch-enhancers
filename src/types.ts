@@ -2,19 +2,21 @@ import type { RequestInfo, RequestInit, Response, Request } from 'node-fetch';
 
 export type Fetch = (url: RequestInfo, init?: RequestInit) => Promise<Response>;
 
-export interface FetchErrorProperties {
+export interface FetchErrorProperties<T> {
   message: string;
   url: string;
   status?:number;
-  data?: Record<string, string>;
+  data?: T;
 }
 
-export class FetchError extends Error {
+export class FetchError<T = Record<string, string>> extends Error {
   url: string;
-  status?: number;
-  data?: Record<string, string>;
 
-  constructor({message, url, status, data}: FetchErrorProperties) {
+  status?: number;
+
+  data?: T;
+
+  constructor({message, url, status, data}: FetchErrorProperties<T>) {
     super(message);
     this.url = url;
     this.status = status;

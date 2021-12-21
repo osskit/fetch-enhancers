@@ -9,8 +9,20 @@ export const withThrow =
 
     if (!response.ok) {
       const responseText = await response.text();
+      let responseJson;
 
-      throw new FetchError({ message: responseText ?? 'fetch error', url: JSON.stringify(url), status: response.status});
+      try {
+        responseJson = JSON.parse(responseText);
+      } catch {
+        // do nothing
+      }
+
+      throw new FetchError({
+        message: responseText ?? 'fetch error',
+        url: JSON.stringify(url),
+        status: response.status,
+        data: responseJson,
+      });
     }
 
     return response;
