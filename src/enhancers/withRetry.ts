@@ -2,6 +2,7 @@ import retry from 'async-retry';
 import type { RequestInfo, RequestInit } from 'node-fetch';
 import type { Fetch } from '../types';
 import { FetchError } from '../types';
+import { Request } from 'node-fetch';
 
 export interface RetryOptions {
   minTimeout?: number;
@@ -25,11 +26,17 @@ export const withRetry =
         }
 
         const responseText = await response.text();
+        const errorUrl = typeof url === 'string' ? url : (url as unknown as Request)?.url;
 
-        throw new FetchError({message: responseText ?? 'fetch error', url: JSON.stringify(url), status: response.status, data: {
-          attempt: String(attempt),
-          status: String(response.status),
-        }});
+        throw new FetchError({
+          message: responseText ?? 'fetch error',
+          url: errorUrl,
+          status: response.status,
+          data: {
+            attempt: String(attempt),
+            status: String(response.status),
+          },
+        });
       },
       { ...finalOptions, onRetry: (err) => finalOptions.onRetry?.(err as FetchError) },
     );

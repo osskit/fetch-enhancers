@@ -1,6 +1,7 @@
 import type { RequestInfo, RequestInit } from 'node-fetch';
 import type { Fetch } from '../types';
 import { FetchError } from '../types';
+import { Request } from 'node-fetch';
 
 export const withThrow =
   (fetch: Fetch): Fetch =>
@@ -17,9 +18,11 @@ export const withThrow =
         // do nothing
       }
 
+      const errorUrl = typeof url === 'string' ? url : (url as unknown as Request)?.url;
+
       throw new FetchError({
         message: responseText ?? 'fetch error',
-        url: JSON.stringify(url),
+        url: errorUrl,
         status: response.status,
         data: responseJson,
       });

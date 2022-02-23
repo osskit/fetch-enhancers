@@ -2,6 +2,7 @@ import type { RequestInfo, RequestInit } from 'node-fetch';
 
 import type { Fetch } from '../types';
 import { FetchError } from '../types';
+import { Request } from 'node-fetch';
 
 export interface BasicAuthenticationParams {
   username: string;
@@ -24,8 +25,9 @@ export const withBasicAuth =
 
     if (!response.ok) {
       const responseText = await response.text();
+      const errorUrl = typeof url === 'string' ? url : (url as unknown as Request)?.url;
 
-      throw new FetchError({message: responseText ?? 'fetch error', url: JSON.stringify(url), status: response.status});
+      throw new FetchError({ message: responseText ?? 'fetch error', url: errorUrl, status: response.status });
     }
 
     return response;

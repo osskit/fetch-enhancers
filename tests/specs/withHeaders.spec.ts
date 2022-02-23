@@ -2,15 +2,15 @@ import { createServer } from 'http';
 import { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 
-import {withHeaders } from '../../src';
+import { withHeaders } from '../../src';
 
-const fetchWithHeaders = withHeaders(fetch, () => ({"foo": "bar"}));
+const fetchWithHeaders = withHeaders(fetch, () => ({ foo: 'bar' }));
 
 test('throws error when fetch fails ', async () => {
   const server = createServer((req, res) => {
-    const response = req.headers['foo']
+    const response = req.headers['foo'];
 
-    res.writeHead(200)
+    res.writeHead(200);
     res.end(response);
   });
 
@@ -28,4 +28,3 @@ test('throws error when fetch fails ', async () => {
     server.on('error', reject);
   });
 });
-
