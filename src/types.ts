@@ -5,7 +5,7 @@ export type Fetch = (url: RequestInfo, init?: RequestInit) => Promise<Response>;
 export interface FetchErrorProperties<T> {
   message: string;
   url: string;
-  status?:number;
+  status?: number;
   data?: T;
 }
 
@@ -16,7 +16,7 @@ export class FetchError<T = Record<string, string>> extends Error {
 
   data?: T;
 
-  constructor({message, url, status, data}: FetchErrorProperties<T>) {
+  constructor({ message, url, status, data }: FetchErrorProperties<T>) {
     super(message);
     this.url = url;
     this.status = status;

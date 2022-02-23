@@ -1,5 +1,5 @@
 import AbortController from 'abort-controller';
-import type { RequestInfo, RequestInit } from 'node-fetch';
+import type { Request, RequestInfo, RequestInit } from 'node-fetch';
 
 import type { Fetch } from '../types';
 import { FetchError } from '../types';
@@ -17,7 +17,12 @@ export const withTimeout = (fetch: Fetch, options: TimeoutOptions) => async (url
   try {
     return await fetch(url, { signal: controller.signal, ...init });
   } catch (error) {
-    throw new FetchError({message: (error as Error).message ?? 'fetch error', url: JSON.stringify(url)});
+    const errorUrl = typeof url === 'string' ? url : (url as unknown as Request)?.url ?? (url as unknown as { href: string }).href;
+
+    throw new FetchError({
+      message: (error as Error).message ?? 'fetch error',
+      url: errorUrl,
+    });
   } finally {
     clearTimeout(timeoutId);
   }
