@@ -17,7 +17,7 @@ export const withTimeout = (fetch: Fetch, options: TimeoutOptions) => async (url
   try {
     return await fetch(url, { signal: controller.signal, ...init });
   } catch (error) {
-    const errorUrl = typeof url === 'string' ? url : (url as unknown as Request)?.url ?? (url as unknown as { href: string }).href;
+    const errorUrl = typeof url === 'string' ? url : (url as unknown as Request)?.url;
 
     throw new FetchError({
       message: (error as Error).message ?? 'fetch error',

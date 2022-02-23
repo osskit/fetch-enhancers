@@ -26,7 +26,7 @@ export const withRetry =
         }
 
         const responseText = await response.text();
-        const errorUrl = typeof url === 'string' ? url : (url as unknown as Request)?.url ?? (url as unknown as { href: string }).href;
+        const errorUrl = typeof url === 'string' ? url : (url as unknown as Request)?.url;
 
         throw new FetchError({
           message: responseText ?? 'fetch error',
