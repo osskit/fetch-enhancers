@@ -1,6 +1,6 @@
 import { createServer } from 'http';
 import { AddressInfo } from 'net';
-import fetch from 'node-fetch';
+import fetch, { Headers } from 'node-fetch';
 
 import { withHeaders } from '../../src';
 
@@ -29,7 +29,7 @@ test('throws error when fetch fails ', async () => {
   });
 });
 
-const fetchWithExtraHeaders = withHeaders(fetch, (headers) => ({ ...headers, foo: 'bar', id: 'override' }));
+const fetchWithExtraHeaders = withHeaders(fetch, (headers) => ({ ...new Headers(headers), foo: 'bar', id: 'override' }));
 
 test('add headers', async () => {
   const server = createServer((req, res) => {
