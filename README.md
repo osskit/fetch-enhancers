@@ -1,7 +1,7 @@
 # fetch-enhancers
 
-A collection of composable enhancers on top of standard js fetch api.
-Does not include a fetch implementation, you need to bring your owm.
+A collection of composable enhancers on top of standard JS FetchAPI.
+Bring your own FetchAPI implementation :pray:
 
 # install
 
@@ -9,7 +9,7 @@ Does not include a fetch implementation, you need to bring your owm.
 yarn add @osskit/fetch-enhancers
 ```
 
-# usage
+# Usage
 
 ```
 import fetch from 'node-fetch'
