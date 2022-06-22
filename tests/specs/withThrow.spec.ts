@@ -2,7 +2,8 @@ import { createServer } from 'http';
 import { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 
-import { withThrow, FetchError } from '../../src';
+import { withThrow } from '../../src/enhancers/withThrow.js';
+import { FetchError } from '../../src/types.js';
 
 const throwingFetch = withThrow(fetch);
 

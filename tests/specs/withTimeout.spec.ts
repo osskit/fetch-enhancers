@@ -2,7 +2,8 @@ import { createServer } from 'http';
 import { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 
-import { withTimeout, FetchError } from '../../src';
+import { withTimeout } from '../../src/enhancers/withTimeout.js';
+import { FetchError } from '../../src/types.js';
 
 const timeoutFetch = withTimeout(fetch, { requestTimeoutMs: 100 });
 
