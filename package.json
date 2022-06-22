@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "jest --runInBand --forceExit --config tests/jest.config.ts",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand --forceExit --config tests/jest.config.ts",
     "lint:base": "eslint . --ext .ts",
     "lint": "yarn lint:base --fix",
     "format": "prettier --write '**/*.{ts,js,json}'",
