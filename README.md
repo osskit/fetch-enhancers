@@ -2,11 +2,12 @@
 <img width="350" height="200" src="https://user-images.githubusercontent.com/15312980/175094325-5d4a0459-79e5-4386-ade9-e46d4cef36f2.svg"/>
 </p>
 
-# fetch-enhancers
-
+<div align="center">
 A collection of composable enhancers on top of standard JS FetchAPI.
 
-Bring your own FetchAPI implementation :pray:
+Bring your own FetchAPI implementation :pray:       
+ </div>
+
 
 # install
 
