@@ -24,7 +24,7 @@
     "prepare": "husky install"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "devDependencies": {
     "@osskit/eslint-config": "^1.0.3",
