@@ -2,7 +2,7 @@ import { createServer } from 'http';
 import { AddressInfo } from 'net';
 import fetch, { Headers } from 'node-fetch';
 
-import { withHeaders } from '../../src';
+import { withHeaders } from '../../src/enhancers/withHeaders.js';
 
 const fetchWithHeaders = withHeaders(fetch, () => ({ foo: 'bar' }));
 

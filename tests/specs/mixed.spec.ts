@@ -2,7 +2,10 @@ import { createServer } from 'http';
 import { AddressInfo } from 'net';
 import fetch from 'node-fetch';
 
-import { withThrow, withRetry, withTimeout, withBasicAuth } from '../../src';
+import {withThrow} from '../../src/enhancers/withThrow.js';
+import {withRetry} from '../../src/enhancers/withRetry.js';
+import {withTimeout} from '../../src/enhancers/withTimeout.js';
+import {withBasicAuth} from '../../src/enhancers/withBasicAuth.js';
 
 test('mixed ', async () => {
   const retryOpts = { onRetry: (_: Error) => console.log('hi!') };

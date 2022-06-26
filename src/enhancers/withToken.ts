@@ -1,5 +1,5 @@
 import type { Request, RequestInit, Response } from 'node-fetch';
-import type { Fetch } from '../types';
+import type { Fetch } from '../types.js';
 
 export const withToken =
   (getToken: () => Promise<string> | string, fetch: Fetch) =>

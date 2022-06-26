@@ -1,8 +1,8 @@
-import type { RequestInfo, RequestInit } from 'node-fetch';
+import type { RequestInfo, RequestInit , Request } from 'node-fetch';
 
-import type { Fetch } from '../types';
-import { FetchError } from '../types';
-import { Request } from 'node-fetch';
+
+import type { Fetch } from '../types.js';
+import { FetchError } from '../types.js';
 
 export interface BasicAuthenticationParams {
   username: string;
