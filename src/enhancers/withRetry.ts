@@ -1,5 +1,4 @@
 import retry from 'async-retry';
-import type { RequestInfo, RequestInit , Request } from 'node-fetch';
 
 import type { Fetch } from '../types.js';
 import { FetchError } from '../types.js';
@@ -13,7 +12,7 @@ export interface RetryOptions {
 
 export const withRetry =
   (fetch: Fetch, options?: RetryOptions): Fetch =>
-  (url: RequestInfo, init?: RequestInit) => {
+  (url, init) => {
     const finalOptions = { minTimeout: 10, retries: 3, factor: 5, ...options };
 
     return retry(
@@ -26,7 +25,7 @@ export const withRetry =
         }
 
         const responseText = await response.text();
-        const errorUrl = typeof url === 'string' ? url : (url as unknown as Request)?.url;
+        const errorUrl = typeof url === 'string' ? url : url?.url;
 
         throw new FetchError({
           message: responseText ?? 'fetch error',

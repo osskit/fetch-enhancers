@@ -1,6 +1,3 @@
 {
-  "extends": ["@osskit"],
-  "ignorePatterns": [
-    "tests/**"
-  ]
+  "extends": ["@osskit"]
 }
