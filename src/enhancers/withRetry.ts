@@ -1,7 +1,7 @@
 import retry from 'async-retry';
 
 import type { Fetch } from '../types.js';
-import { FetchError } from '../types.js';
+import { FetchError } from '../fetchError.js';
 
 export interface RetryOptions {
   minTimeout?: number;

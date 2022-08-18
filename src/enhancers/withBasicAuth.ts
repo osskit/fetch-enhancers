@@ -1,5 +1,5 @@
 import type { Fetch } from '../types.js';
-import { FetchError } from '../types.js';
+import { FetchError } from '../fetchError.js';
 
 export interface BasicAuthenticationParams {
   username: string;

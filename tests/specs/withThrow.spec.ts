@@ -3,7 +3,7 @@ import type { AddressInfo } from 'node:net';
 import fetch from 'node-fetch';
 
 import { withThrow } from '../../src/index.js';
-import { FetchError } from '../../src/types.js';
+import { FetchError } from '../../src/fetchError.js';
 
 const throwingFetch = withThrow(fetch);
 
