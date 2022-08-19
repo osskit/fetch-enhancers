@@ -1,11 +1,9 @@
-import type { RequestInfo, RequestInit , Request } from 'node-fetch';
-
 import type { Fetch } from '../types.js';
-import { FetchError } from '../types.js';
+import { FetchError } from '../fetchError.js';
 
 export const withThrow =
   (fetch: Fetch): Fetch =>
-  async (url: RequestInfo, init?: RequestInit) => {
+  async (url, init) => {
     const response = await fetch(url, init);
 
     if (!response.ok) {
@@ -18,7 +16,7 @@ export const withThrow =
         // do nothing
       }
 
-      const errorUrl = typeof url === 'string' ? url : (url as unknown as Request)?.url;
+      const errorUrl = typeof url === 'string' ? url : url?.url;
 
       throw new FetchError({
         message: responseText ?? 'fetch error',
