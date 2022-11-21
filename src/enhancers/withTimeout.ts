@@ -21,6 +21,8 @@ export const withTimeout =
       throw new FetchError({
         message: (error as Error).message ?? 'fetch error',
         url: errorUrl,
+        status: 504,
+        data: { timeoutOptions: options },
       });
     } finally {
       clearTimeout(timeoutId);
