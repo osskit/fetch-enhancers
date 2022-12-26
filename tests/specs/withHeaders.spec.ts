@@ -1,6 +1,5 @@
 import { createServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
-import fetch, { Headers } from 'node-fetch';
 
 import { withHeaders } from '../../src/index.js';
 
