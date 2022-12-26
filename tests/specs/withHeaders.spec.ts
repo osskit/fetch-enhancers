@@ -31,7 +31,7 @@ describe('withHeaders', () => {
     ).resolves.toBeUndefined();
   });
 
-  const fetchWithExtraHeaders = withHeaders(fetch, (headers) => ({ ...new Headers(headers), foo: 'bar', id: 'override' }));
+  const fetchWithExtraHeaders = withHeaders(fetch, () => ({ foo: 'bar', id: 'override' }));
 
   it('add headers', async () => {
     const server = createServer((req, res) => {

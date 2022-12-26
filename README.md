@@ -18,7 +18,6 @@ yarn add @osskit/fetch-enhancers
 # Usage
 
 ```
-import fetch from 'node-fetch'
 import {withTimeout,withRetry} from '@osskit/fetch-enhancers'
 
 const fetchWithTimeout = withTimeout(fetch, {
