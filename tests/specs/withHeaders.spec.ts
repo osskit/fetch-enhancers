@@ -1,6 +1,5 @@
 import { createServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
-import fetch, { Headers } from 'node-fetch';
 
 import { withHeaders } from '../../src/index.js';
 
@@ -32,7 +31,7 @@ describe('withHeaders', () => {
     ).resolves.toBeUndefined();
   });
 
-  const fetchWithExtraHeaders = withHeaders(fetch, (headers) => ({ ...new Headers(headers), foo: 'bar', id: 'override' }));
+  const fetchWithExtraHeaders = withHeaders(fetch, () => ({ foo: 'bar', id: 'override' }));
 
   it('add headers', async () => {
     const server = createServer((req, res) => {
