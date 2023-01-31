@@ -7,10 +7,10 @@ const retryFetch = withRetry(fetch);
 
 describe('withRetry', () => {
   it('retries upon 500', async () => {
-    let i = 0;
+    let tries = 0;
 
     const server = createServer((_, res) => {
-      if (i++ < 2) {
+      if (tries++ < 2) {
         res.writeHead(500);
         res.end();
         return;
@@ -38,7 +38,10 @@ describe('withRetry', () => {
   });
 
   it('resolves on > MAX_RETRIES', async () => {
+    let tries = 0;
+
     const server = createServer((_, res) => {
+      tries++;
       res.writeHead(500);
       res.end();
     });
@@ -55,5 +58,32 @@ describe('withRetry', () => {
         server.on('error', reject);
       }),
     ).resolves.toBeUndefined();
+
+    expect(tries).toBe(3);
+  });
+
+  it('resolves on < 500', async () => {
+    let tries = 0;
+
+    const server = createServer((_, res) => {
+      tries++;
+      res.writeHead(404);
+      res.end();
+    });
+
+    await expect(
+      new Promise<void>((resolve, reject) => {
+        server.listen(async () => {
+          const { port } = server.address() as AddressInfo;
+          const res = await retryFetch(`http://127.0.0.1:${port}`);
+          expect(res.status).toBe(404);
+          server.close();
+          resolve();
+        });
+        server.on('error', reject);
+      }),
+    ).resolves.toBeUndefined();
+
+    expect(tries).toBe(1);
   });
 });

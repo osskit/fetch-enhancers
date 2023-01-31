@@ -32,8 +32,8 @@ export const withRetry =
           url: errorUrl,
           status: response.status,
           data: {
-            attempt: String(attempt),
-            status: String(response.status),
+            attempt: attempt.toString(),
+            status: response.status.toString(),
           },
         });
       },
