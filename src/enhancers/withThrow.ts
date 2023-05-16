@@ -16,7 +16,7 @@ export const withThrow =
         // do nothing
       }
 
-      const errorUrl = typeof url === 'string' ? url : url?.url;
+      const errorUrl = typeof url === 'string' ? url : url instanceof URL ? url.toString() : url?.url;
 
       throw new FetchError({
         message: responseText ?? 'fetch error',
