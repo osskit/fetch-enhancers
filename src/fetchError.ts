@@ -21,6 +21,6 @@ export class FetchError<T = Record<string, string>> extends Error {
   }
 }
 
-export function isFetchError(error: any) : error is FetchError{
-    return Boolean(error && error.name === "FetchError");
+export function isFetchError(error: any): error is FetchError {
+  return Boolean(error && error.name === 'FetchError');
 }
