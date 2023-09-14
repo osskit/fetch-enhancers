@@ -20,3 +20,7 @@ export class FetchError<T = Record<string, string>> extends Error {
     this.name = 'FetchError';
   }
 }
+
+export function isFetchError(error: any): error is FetchError {
+  return Boolean(error && error.name === 'FetchError');
+}
