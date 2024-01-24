@@ -1,7 +1,8 @@
 import { createServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
 
-import { FetchError, withRetry } from '../../src/index.js';
+import type { FetchError} from '../../src/index.js';
+import { withRetry } from '../../src/index.js';
 
 const retries = 3;
 
