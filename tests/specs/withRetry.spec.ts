@@ -1,9 +1,19 @@
 import { createServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
 
+import type { FetchError} from '../../src/index.js';
 import { withRetry } from '../../src/index.js';
 
-const retryFetch = withRetry(fetch);
+const retries = 3;
+
+const retryFetch = withRetry(fetch, {
+  minTimeout: 1000,
+  maxTimeout: 5000,
+  randomize: false,
+  retries,
+  factor: 1.5,
+  onRetry: (error: FetchError) => error,
+});
 
 describe('withRetry', () => {
   it('retries upon 500', async () => {
@@ -59,7 +69,7 @@ describe('withRetry', () => {
       }),
     ).resolves.toBeUndefined();
 
-    expect(tries).toBe(3);
+    expect(tries).toBe(retries);
   });
 
   it('resolves on < 500', async () => {

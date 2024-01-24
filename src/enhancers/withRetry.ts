@@ -5,6 +5,8 @@ import { FetchError } from '../fetchError.js';
 
 export interface RetryOptions {
   minTimeout?: number;
+  maxTimeout?: number;
+  randomize?: boolean;
   retries?: number;
   factor?: number;
   onRetry?: (error: FetchError) => void;
