@@ -19,6 +19,16 @@ export class FetchError<T = Record<string, string>> extends Error {
     this.data = data;
     this.name = 'FetchError';
   }
+
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      url: this.url,
+      status: this.status,
+      data: this.data,
+    };
+  }
 }
 
 export function isFetchError(error: any): error is FetchError {

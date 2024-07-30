@@ -1,7 +1,8 @@
 import { createServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
-
+import { describe, it, expect } from 'vitest';
 import { withThrow, withRetry, withTimeout, withBasicAuth } from '../../src/index.js';
+import { waitForServer } from '../services/waitForServer.js';
 
 describe('mixed', () => {
   it('mixed', async () => {
@@ -23,19 +24,10 @@ describe('mixed', () => {
       res.end();
     });
 
-    await expect(
-      new Promise<void>((resolve, reject) => {
-        server.listen(async () => {
-          const { port } = server.address() as AddressInfo;
-          try {
-            await enhancedFetch(`http://127.0.0.1:${port}`);
-            resolve();
-          } finally {
-            server.close();
-          }
-        });
-        server.on('error', reject);
-      }),
-    ).resolves.toBeUndefined();
+    await waitForServer(server);
+
+    const { port } = server.address() as AddressInfo;
+    await expect(enhancedFetch(`http://127.0.0.1:${port}`)).resolves.toBeInstanceOf(Response);
+    server.close();
   });
 });
