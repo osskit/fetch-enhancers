@@ -1,0 +1,4 @@
+{
+  "extends": "@osskit/tsconfig",
+  "include": ["src/**/*", "tests/**/*"]
+}
