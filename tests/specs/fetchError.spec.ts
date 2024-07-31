@@ -10,8 +10,15 @@ describe('fetchError', () => {
       message: 'error',
     });
 
-    expect(JSON.stringify(error)).toBe(
-      '{"name":"FetchError","message":"error","url":"http://localhost","status":400,"data":{"type":"mySpecialError"}}',
-    );
+    const stringifiedError = JSON.stringify(error);
+    expect(stringifiedError).toBeTypeOf('string');
+    expect(JSON.parse(stringifiedError)).toMatchObject({
+      name: 'FetchError',
+      message: 'error',
+      url: 'http://localhost',
+      status: 400,
+      data: { type: 'mySpecialError' },
+      stack: expect.any(String),
+    });
   });
 });

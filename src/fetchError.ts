@@ -27,6 +27,7 @@ export class FetchError<T = Record<string, string>> extends Error {
       url: this.url,
       status: this.status,
       data: this.data,
+      ...(this.stack && { stack: this.stack }),
     };
   }
 }
