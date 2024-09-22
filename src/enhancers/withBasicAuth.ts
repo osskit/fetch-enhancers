@@ -7,10 +7,8 @@ export interface BasicAuthenticationParams {
 }
 
 export const withBasicAuth =
-  (fetch: Fetch, options: BasicAuthenticationParams): Fetch =>
+  (fetch: Fetch, { username, password }: BasicAuthenticationParams): Fetch =>
   async (url, init) => {
-    const { username, password } = options;
-
     const response = await fetch(url, {
       ...init,
       headers: {
