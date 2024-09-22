@@ -31,7 +31,6 @@
     "@osskit/prettier-config": "^0.0.1",
     "@osskit/tsconfig": "^0.0.7",
     "@types/async-retry": "^1.4.8",
-    "@types/jest": "^29.5.13",
     "@types/node": "^22.5.5",
     "eslint": "^9.11.0",
     "husky": "^9.1.6",
