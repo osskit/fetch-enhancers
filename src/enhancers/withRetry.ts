@@ -18,7 +18,7 @@ const defaultShouldRetry = (response: Response) => response.status >= 500 && res
 export const withRetry =
   (fetch: Fetch, options?: RetryOptions): Fetch =>
   (url, init) => {
-    const finalOptions = { minTimeout: 10, retries: 3, factor: 5, ...options };
+    const finalOptions = { minTimeout: 10, retries: 3, factor: 5, shouldRetry: defaultShouldRetry, ...options };
 
     const shouldRetry = options?.shouldRetry ?? defaultShouldRetry;
 
