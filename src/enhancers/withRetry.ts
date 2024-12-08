@@ -13,7 +13,7 @@ export interface RetryOptions {
   shouldRetry?: (response: Response) => boolean;
 }
 
-const defaultShouldRetry = (response: Response) => response.status > 500 && response.status < 600;
+const defaultShouldRetry = (response: Response) => response.status >= 500 && response.status < 600;
 
 export const withRetry =
   (fetch: Fetch, options?: RetryOptions): Fetch =>
