@@ -39,6 +39,36 @@ describe('withRetry', () => {
     server.close();
   });
 
+  it('custom should retry', async () => {
+    let tries = 0;
+
+    const server = createServer((_, res) => {
+      if (tries++ < 2) {
+        res.writeHead(529);
+        res.end();
+        return;
+      }
+
+      res.end('ha');
+    });
+
+    await waitForServer(server);
+
+    const { port } = server.address() as AddressInfo;
+    const res = await withRetry(fetch, {
+      minTimeout: 1000,
+      maxTimeout: 5000,
+      randomize: false,
+      retries,
+      factor: 1.5,
+      onRetry: (error: FetchError) => error,
+      shouldRetry: () => true,
+    })(`http://127.0.0.1:${port}`);
+    await expect(res.text()).resolves.toBe('ha');
+
+    server.close();
+  });
+
   it('resolves on > MAX_RETRIES', async () => {
     let tries = 0;
 

@@ -10,19 +10,22 @@ export interface RetryOptions {
   retries?: number;
   factor?: number;
   onRetry?: (error: FetchError) => void;
+  shouldRetry?: (response: Response) => boolean;
 }
+
+const defaultShouldRetry = (response: Response) => response.status >= 500 && response.status < 600;
 
 export const withRetry =
   (fetch: Fetch, options?: RetryOptions): Fetch =>
   (url, init) => {
-    const finalOptions = { minTimeout: 10, retries: 3, factor: 5, ...options };
+    const finalOptions = { minTimeout: 10, retries: 3, factor: 5, shouldRetry: defaultShouldRetry, ...options };
 
     return retry(
       async (_bail, attempt) => {
         const isRetry = attempt < (finalOptions.retries ?? 3);
         const response = await fetch(url, init);
 
-        if (response.status < 500 || response.status >= 600 || !isRetry) {
+        if (!finalOptions.shouldRetry(response) || !isRetry) {
           return response;
         }
 
