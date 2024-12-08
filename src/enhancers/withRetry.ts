@@ -20,14 +20,12 @@ export const withRetry =
   (url, init) => {
     const finalOptions = { minTimeout: 10, retries: 3, factor: 5, shouldRetry: defaultShouldRetry, ...options };
 
-    const shouldRetry = options?.shouldRetry ?? defaultShouldRetry;
-
     return retry(
       async (_bail, attempt) => {
         const isRetry = attempt < (finalOptions.retries ?? 3);
         const response = await fetch(url, init);
 
-        if (!shouldRetry(response) || !isRetry) {
+        if (!finalOptions.shouldRetry(response) || !isRetry) {
           return response;
         }
 
