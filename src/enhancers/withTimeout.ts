@@ -7,13 +7,10 @@ export interface TimeoutOptions {
 
 const scheduleNext = (callback: () => void) => {
   if (typeof setImmediate !== 'undefined') {
-    // Node.js
     setImmediate(callback);
   } else if (typeof requestAnimationFrame !== 'undefined') {
-    // Browser
     requestAnimationFrame(callback);
   } else {
-    // Fallback
     Promise.resolve().then(callback);
   }
 };
