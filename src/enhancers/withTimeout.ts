@@ -5,26 +5,52 @@ export interface TimeoutOptions {
   requestTimeoutMs: number;
 }
 
-export const withTimeout =
-  (fetch: Fetch, options: TimeoutOptions): Fetch =>
-  async (url, init) => {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => {
-      controller.abort();
-    }, options.requestTimeoutMs);
+const scheduleNext = (callback: () => void) => {
+  if (typeof setImmediate !== 'undefined') {
+    // Node.js
+    setImmediate(callback);
+  } else if (typeof requestAnimationFrame !== 'undefined') {
+    // Browser
+    requestAnimationFrame(callback);
+  } else {
+    // Fallback
+    Promise.resolve().then(callback);
+  }
+};
 
-    try {
-      return await fetch(url, { signal: controller.signal, ...init });
-    } catch (error) {
-      const errorUrl = typeof url === 'string' ? url : url instanceof URL ? url.toString() : url?.url;
-
-      throw new FetchError({
-        message: (error as Error).message ?? 'fetch error',
-        url: errorUrl,
-        status: 504,
-        data: { timeoutOptions: options },
-      });
-    } finally {
-      clearTimeout(timeoutId);
+const delay = (ms: number) => new Promise((resolve) => {
+  const start = performance.now();
+  const check = () => {
+    if (performance.now() - start >= ms) {
+      resolve(void 0);
+    } else {
+      scheduleNext(check);
     }
   };
+  check();
+});
+
+export const withTimeout = (fetch: Fetch, options: TimeoutOptions) => async (url: string, init: RequestInit) => {
+  const controller = new AbortController();
+  const { requestTimeoutMs } = options;
+  
+  const timeoutPromise = delay(requestTimeoutMs).then(() => {
+    controller.abort();
+    throw new Error('request timeout');
+  });
+  
+  try {
+    const res = await Promise.race([
+      fetch(url, { signal: controller.signal, ...init }),
+      timeoutPromise
+    ]);
+    return res;
+  } catch (error) {
+    throw new FetchError({
+      message: (error as Error).message ?? 'fetch error',
+      url,
+      status: 504,
+      data: { timeoutOptions: options },
+    });
+  }
+};
