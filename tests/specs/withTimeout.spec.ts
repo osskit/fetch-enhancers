@@ -5,7 +5,7 @@ import pReflect from 'p-reflect';
 import { withTimeout, FetchError } from '../../src/index.js';
 import { waitForServer } from '../services/waitForServer.js';
 
-const timeoutOptions = { requestTimeoutMs: 10000 };
+const timeoutOptions = { requestTimeoutMs: 10_000 };
 const timeoutFetch = withTimeout(fetch, timeoutOptions);
 
 describe('withTimeout', () => {
@@ -14,7 +14,7 @@ describe('withTimeout', () => {
       setTimeout(() => {
         res.writeHead(200);
         res.end();
-      }, 60000);
+      }, 60_000);
     });
 
     await waitForServer(server);

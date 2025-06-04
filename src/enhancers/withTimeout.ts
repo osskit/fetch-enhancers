@@ -11,7 +11,7 @@ const scheduleNext = (callback: () => void) => {
   } else if (typeof requestAnimationFrame !== 'undefined') {
     requestAnimationFrame(callback);
   } else {
-    Promise.resolve().then(callback);
+    callback();
   }
 };
 
@@ -19,7 +19,7 @@ const delay = (ms: number) => new Promise((resolve) => {
   const start = performance.now();
   const check = () => {
     if (performance.now() - start >= ms) {
-      resolve(void 0);
+      resolve(null);
     } else {
       scheduleNext(check);
     }
