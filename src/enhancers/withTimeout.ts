@@ -30,8 +30,9 @@ const delay = (ms: number) => new Promise((resolve) => {
   check();
 });
 
-export const withTimeout = (fetch: Fetch, options: TimeoutOptions) => async (url: string, init: RequestInit) => {
-  const controller = new AbortController();
+export const withTimeout =
+  (fetch: Fetch, options: TimeoutOptions): Fetch =>
+  async (url, init) => {  const controller = new AbortController();
   const { requestTimeoutMs } = options;
   
   const timeoutPromise = delay(requestTimeoutMs).then(() => {
@@ -48,7 +49,7 @@ export const withTimeout = (fetch: Fetch, options: TimeoutOptions) => async (url
   } catch (error) {
     throw new FetchError({
       message: (error as Error).message ?? 'fetch error',
-      url,
+      url: typeof url === 'string' ? url : url instanceof URL ? url.toString() : url?.url,
       status: 504,
       data: { timeoutOptions: options },
     });
