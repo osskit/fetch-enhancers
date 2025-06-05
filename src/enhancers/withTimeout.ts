@@ -8,23 +8,31 @@ export interface TimeoutOptions {
 export const withTimeout =
   (fetch: Fetch, options: TimeoutOptions): Fetch =>
   async (url, init) => {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => {
-      controller.abort();
-    }, options.requestTimeoutMs);
-
     try {
-      return await fetch(url, { signal: controller.signal, ...init });
+      return await fetch(url, { signal: AbortSignal.any([AbortSignal.timeout(options.requestTimeoutMs), ...(init?.signal ? [init.signal] : [])]), ...init });
     } catch (error) {
       const errorUrl = typeof url === 'string' ? url : url instanceof URL ? url.toString() : url?.url;
-
-      throw new FetchError({
-        message: (error as Error).message ?? 'fetch error',
-        url: errorUrl,
-        status: 504,
-        data: { timeoutOptions: options },
-      });
-    } finally {
-      clearTimeout(timeoutId);
+      if (error instanceof Error) {
+        switch (error.name) {
+          case 'AbortError': {
+            throw new FetchError({
+              message: 'abort requested',
+              url: errorUrl,
+              data: { timeoutOptions: options },
+            });
+          }
+          case 'TimeoutError': {
+            throw new FetchError({
+              message: 'request timeout',
+              url: errorUrl,
+              data: { timeoutOptions: options },
+            });
+          }
+          default: {
+            throw error;
+          }
+        }
+      } 
+      throw error;
     }
   };
