@@ -9,7 +9,10 @@ export const withTimeout =
   (fetch: Fetch, options: TimeoutOptions): Fetch =>
   async (url, init) => {
     try {
-      return await fetch(url, { signal: AbortSignal.any([AbortSignal.timeout(options.requestTimeoutMs), ...(init?.signal ? [init.signal] : [])]), ...init });
+      return await fetch(url, {
+        signal: AbortSignal.any([AbortSignal.timeout(options.requestTimeoutMs), ...(init?.signal ? [init.signal] : [])]),
+        ...init,
+      });
     } catch (error) {
       const errorUrl = typeof url === 'string' ? url : url instanceof URL ? url.toString() : url?.url;
       if (error instanceof Error) {
