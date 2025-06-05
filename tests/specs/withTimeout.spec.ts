@@ -6,13 +6,13 @@ import pReflect from 'p-reflect';
 import { withTimeout, FetchError } from '../../src/index.js';
 import { waitForServer } from '../services/waitForServer.js';
 
-const timeoutOptions = { requestTimeoutMs: 5000 };
+const timeoutOptions = { requestTimeoutMs: 100 };
 const timeoutFetch = withTimeout(fetch, timeoutOptions);
 
 describe('withTimeout', () => {
   it('times out when server does not respond in time', async () => {
     const server = createServer(async (_, res) => {
-      await setTimeout(30_000);
+      await setTimeout(2000);
       res.writeHead(200);
       res.end();
     });
@@ -29,7 +29,7 @@ describe('withTimeout', () => {
 
   it('should respect the signal', async () => {
     const server = createServer(async (_, res) => {
-      await setTimeout(30_000);
+      await setTimeout(2000);
       res.writeHead(200);
       res.end();
     });
@@ -40,7 +40,7 @@ describe('withTimeout', () => {
 
     const controller = new AbortController();
 
-    void setTimeout(1000).then(() => {
+    void setTimeout(100).then(() => {
       controller.abort();
     });
 
@@ -50,4 +50,4 @@ describe('withTimeout', () => {
     expect((error as FetchError).message).toBe('abort requested');
     server.close();
   });
-}, 10_000);
+});
