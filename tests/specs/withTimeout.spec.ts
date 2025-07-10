@@ -50,4 +50,21 @@ describe('withTimeout', () => {
     expect((error as FetchError).message).toBe('abort requested');
     server.close();
   });
+
+  it('times out when the first parameter is a Request object', async () => {
+    const server = createServer(async (_, res) => {
+      await setTimeout(2000);
+      res.writeHead(200);
+      res.end();
+    });
+
+    await waitForServer(server);
+    const { port } = server.address() as AddressInfo;
+    const request = new Request(`http://127.0.0.1:${port}`);
+    const result = await pReflect(timeoutFetch(request));
+    const error = result.isRejected ? result.reason : null;
+    expect(error).toBeInstanceOf(FetchError);
+    expect((error as FetchError).message).toBe('request timeout');
+    server.close();
+  });
 });

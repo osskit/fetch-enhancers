@@ -103,4 +103,22 @@ describe('withHeaders', () => {
     await expect(res.json()).resolves.toStrictEqual({ foo: 'bar', bar: 'baz' });
     server.close();
   });
+
+  it('merges headers when the first parameter is a Request object', async () => {
+    const server = createServer((req, res) => {
+      const response = JSON.stringify({ foo: req.headers.foo, bar: req.headers.bar, baz: req.headers.baz });
+      res.writeHead(200);
+      res.end(response);
+    });
+
+    await waitForServer(server);
+    const { port } = server.address() as AddressInfo;
+    const request = new Request(`http://127.0.0.1:${port}`, {
+      headers: { bar: 'bar', baz: 'baz' },
+    });
+    const fetchWithHeadersInstance = withHeaders(fetch, () => ({ foo: 'foo', bar: 'override-bar' }));
+    const res = await fetchWithHeadersInstance(request);
+    await expect(res.json()).resolves.toStrictEqual({ foo: 'foo', bar: 'override-bar', baz: 'baz' });
+    server.close();
+  });
 });

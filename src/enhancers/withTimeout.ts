@@ -10,8 +10,18 @@ export const withTimeout =
   async (url, init) => {
     try {
       const timeoutSignal = AbortSignal.timeout(options.requestTimeoutMs);
+
+      if (url instanceof Request) {
+        const signal = url.signal ? AbortSignal.any([timeoutSignal, url.signal]) : timeoutSignal;
+        const requestWithTimeout = new Request(url, {
+          ...init,
+          signal,
+        });
+        return await fetch(requestWithTimeout);
+      }
+
       const signal = init?.signal ? AbortSignal.any([timeoutSignal, init.signal]) : timeoutSignal;
-      
+
       return await fetch(url, {
         signal,
         ...init,
