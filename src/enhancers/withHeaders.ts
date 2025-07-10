@@ -16,13 +16,25 @@ const headersToObject = (headers?: HeadersInit): Record<string, string> | undefi
   return undefined;
 };
 
+const mergeHeaders = async (getHeaders: (headers?: HeadersInit) => HeadersInit | Promise<HeadersInit>, originalHeaders?: HeadersInit) => ({
+  ...headersToObject(originalHeaders),
+  ...headersToObject(await getHeaders(originalHeaders)),
+});
+
 export const withHeaders =
   (fetch: Fetch, getHeaders: (headers?: HeadersInit) => HeadersInit | Promise<HeadersInit>): Fetch =>
-  async (url, init) =>
-    fetch(url, {
+  async (url, init) => {
+    if (url instanceof Request) {
+      const mergedHeaders = await mergeHeaders(getHeaders, url.headers);
+      const requestWithHeaders = new Request(url, {
+        ...init,
+        headers: mergedHeaders,
+      });
+      return fetch(requestWithHeaders);
+    }
+
+    return fetch(url, {
       ...init,
-      headers: {
-        ...headersToObject(init?.headers),
-        ...headersToObject(await getHeaders(init?.headers)),
-      },
+      headers: await mergeHeaders(getHeaders, init?.headers),
     });
+  };
