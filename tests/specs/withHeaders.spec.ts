@@ -37,7 +37,70 @@ describe('withHeaders', () => {
 
     const { port } = server.address() as AddressInfo;
     const res = await fetchWithExtraHeaders(`http://127.0.0.1:${port}`, { headers: { id: 'id', bar: 'bar' } });
-    await expect(res.text()).resolves.toMatchInlineSnapshot(`"{"id":"override","bar":"bar","foo":"foo"}"`);
+    await expect(res.json()).resolves.toStrictEqual({ id: 'override', bar: 'bar', foo: 'foo' });
+    server.close();
+  });
+
+  it('add headers when getHeaders returns a promise', async () => {
+    const fetchWithAsyncHeaders = withHeaders(fetch, async () => ({ foo: 'foo', id: 'override' }));
+    const server = createServer((req, res) => {
+      const response = JSON.stringify({ id: req.headers.id, bar: req.headers.bar, foo: req.headers.foo });
+      res.writeHead(200);
+      res.end(response);
+    });
+
+    await waitForServer(server);
+    const { port } = server.address() as AddressInfo;
+    const res = await fetchWithAsyncHeaders(`http://127.0.0.1:${port}`, { headers: { id: 'id', bar: 'bar' } });
+    await expect(res.json()).resolves.toStrictEqual({ id: 'override', bar: 'bar', foo: 'foo' });
+    server.close();
+  });
+
+  it('merges headers when init.headers is a Headers instance', async () => {
+    const server = createServer((req, res) => {
+      const response = JSON.stringify({ foo: req.headers.foo, bar: req.headers.bar });
+      res.writeHead(200);
+      res.end(response);
+    });
+
+    await waitForServer(server);
+    const { port } = server.address() as AddressInfo;
+    const headers = new Headers({ bar: 'baz' });
+    const fetchWithHeadersInstance = withHeaders(fetch, () => ({ foo: 'bar' }));
+    const res = await fetchWithHeadersInstance(`http://127.0.0.1:${port}`, { headers });
+    await expect(res.json()).resolves.toStrictEqual({ foo: 'bar', bar: 'baz' });
+    server.close();
+  });
+
+  it('merges headers when init.headers is an object and getHeaders returns a Headers instance', async () => {
+    const server = createServer((req, res) => {
+      const response = JSON.stringify({ foo: req.headers.foo, bar: req.headers.bar });
+      res.writeHead(200);
+      res.end(response);
+    });
+
+    await waitForServer(server);
+    const { port } = server.address() as AddressInfo;
+    const headers = new Headers({ bar: 'baz' });
+    const fetchWithHeadersInstance = withHeaders(fetch, () => new Headers({ foo: 'bar' }));
+    const res = await fetchWithHeadersInstance(`http://127.0.0.1:${port}`, { headers });
+    await expect(res.json()).resolves.toStrictEqual({ foo: 'bar', bar: 'baz' });
+    server.close();
+  });
+
+  it('merges headers when init.headers is a Headers instance and getHeaders returns a Headers instance', async () => {
+    const server = createServer((req, res) => {
+      const response = JSON.stringify({ foo: req.headers.foo, bar: req.headers.bar });
+      res.writeHead(200);
+      res.end(response);
+    });
+
+    await waitForServer(server);
+    const { port } = server.address() as AddressInfo;
+    const headers = new Headers({ bar: 'baz' });
+    const fetchWithHeadersInstance = withHeaders(fetch, () => new Headers({ foo: 'bar' }));
+    const res = await fetchWithHeadersInstance(`http://127.0.0.1:${port}`, { headers });
+    await expect(res.json()).resolves.toStrictEqual({ foo: 'bar', bar: 'baz' });
     server.close();
   });
 });
