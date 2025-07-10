@@ -8,13 +8,6 @@ export default typescriptEslint.config(
   {
     ...baseConfig,
     files: ['src/**/*.ts', 'tests/**/*.ts'],
-    languageOptions: {
-      ...baseConfig.languageOptions,
-      parserOptions: {
-        ...baseConfig.languageOptions.parserOptions,
-        project: ['./tsconfig.eslint.json'],
-      },
-    },
   },
   {
     ...testConfig,
