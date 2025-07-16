@@ -34,6 +34,7 @@ describe('withRetry', () => {
 
     const { port } = server.address() as AddressInfo;
     const res = await retryFetch(`http://127.0.0.1:${port}`);
+
     await expect(res.text()).resolves.toBe('ha');
 
     server.close();
@@ -64,6 +65,7 @@ describe('withRetry', () => {
       onRetry: (error: FetchError) => error,
       shouldRetry: () => true,
     })(`http://127.0.0.1:${port}`);
+
     await expect(res.text()).resolves.toBe('ha');
 
     server.close();
@@ -82,7 +84,9 @@ describe('withRetry', () => {
 
     const { port } = server.address() as AddressInfo;
     const res = await retryFetch(`http://127.0.0.1:${port}`);
+
     expect(res.status).toBe(500);
+
     server.close();
 
     expect(tries).toBe(retries);
@@ -101,7 +105,9 @@ describe('withRetry', () => {
 
     const { port } = server.address() as AddressInfo;
     const res = await retryFetch(`http://127.0.0.1:${port}`);
+
     expect(res.status).toBe(404);
+
     server.close();
 
     expect(tries).toBe(1);
@@ -126,7 +132,9 @@ describe('withRetry', () => {
       body: 'payload',
     });
     const res = await retryFetch(request);
+
     await expect(res.text()).resolves.toBe('ok');
+
     server.close();
   });
 });

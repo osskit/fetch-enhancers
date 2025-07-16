@@ -27,7 +27,9 @@ describe('mixed', () => {
     await waitForServer(server);
 
     const { port } = server.address() as AddressInfo;
+
     await expect(enhancedFetch(`http://127.0.0.1:${port}`)).resolves.toBeInstanceOf(Response);
+
     server.close();
   });
 
@@ -54,6 +56,7 @@ describe('mixed', () => {
 
     const { port } = server.address() as AddressInfo;
     const request = new Request(`http://127.0.0.1:${port}`);
+
     await expect(enhancedFetch(request)).resolves.toBeInstanceOf(Response);
 
     server.close();
@@ -87,7 +90,9 @@ describe('mixed', () => {
       method: 'POST',
       body: 'payload',
     });
+
     await expect(enhancedFetch(request)).resolves.toBeInstanceOf(Response);
+
     server.close();
   });
 });

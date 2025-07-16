@@ -11,6 +11,7 @@ describe('fetchError', () => {
     });
 
     const stringifiedError = JSON.stringify(error);
+
     expect(stringifiedError).toBeTypeOf('string');
     expect(JSON.parse(stringifiedError)).toMatchObject({
       name: 'FetchError',

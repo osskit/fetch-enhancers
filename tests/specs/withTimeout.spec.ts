@@ -22,8 +22,10 @@ describe('withTimeout', () => {
     const { port } = server.address() as AddressInfo;
     const result = await pReflect(timeoutFetch(`http://127.0.0.1:${port}`));
     const error = result.isRejected ? result.reason : null;
+
     expect(error).toBeInstanceOf(FetchError);
     expect((error as FetchError).message).toBe('request timeout');
+
     server.close();
   });
 
@@ -46,8 +48,10 @@ describe('withTimeout', () => {
 
     const result = await pReflect(timeoutFetch(`http://127.0.0.1:${port}`, { signal: controller.signal }));
     const error = result.isRejected ? result.reason : null;
+
     expect(error).toBeInstanceOf(FetchError);
     expect((error as FetchError).message).toBe('abort requested');
+
     server.close();
   });
 
@@ -63,8 +67,10 @@ describe('withTimeout', () => {
     const request = new Request(`http://127.0.0.1:${port}`);
     const result = await pReflect(timeoutFetch(request));
     const error = result.isRejected ? result.reason : null;
+
     expect(error).toBeInstanceOf(FetchError);
     expect((error as FetchError).message).toBe('request timeout');
+
     server.close();
   });
 });

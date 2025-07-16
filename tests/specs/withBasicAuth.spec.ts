@@ -22,7 +22,9 @@ describe('withBasicAuth', () => {
     const { port } = server.address() as AddressInfo;
     const fetchWithBasicAuth = withBasicAuth(fetch, { username, password });
     const res = await fetchWithBasicAuth(`http://127.0.0.1:${port}`);
+
     await expect(res.text()).resolves.toBe(`{"authorization":"${basicAuth}"}`);
+
     server.close();
   });
 
@@ -40,7 +42,9 @@ describe('withBasicAuth', () => {
     const headers = new Headers({ foo: 'bar' });
     const fetchWithBasicAuth = withBasicAuth(fetch, { username, password });
     const res = await fetchWithBasicAuth(`http://127.0.0.1:${port}`, { headers });
+
     await expect(res.text()).resolves.toBe(`{"authorization":"${basicAuth}","foo":"bar"}`);
+
     server.close();
   });
 });
