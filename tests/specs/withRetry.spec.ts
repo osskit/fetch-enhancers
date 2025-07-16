@@ -106,4 +106,27 @@ describe('withRetry', () => {
 
     expect(tries).toBe(1);
   });
+
+  it('retries with a Request object as url and body should clone the request to avoid "already used" errors', async () => {
+    let tries = 0;
+
+    const server = createServer((_, res) => {
+      if (tries++ < 2) {
+        res.writeHead(500);
+        res.end();
+        return;
+      }
+      res.end('ok');
+    });
+
+    await waitForServer(server);
+    const { port } = server.address() as AddressInfo;
+    const request = new Request(`http://127.0.0.1:${port}`, {
+      method: 'POST',
+      body: 'payload',
+    });
+    const res = await retryFetch(request);
+    await expect(res.text()).resolves.toBe('ok');
+    server.close();
+  });
 });
