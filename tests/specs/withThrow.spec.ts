@@ -23,8 +23,10 @@ describe('withThrow', () => {
     const { port } = server.address() as AddressInfo;
     const result = await pReflect(throwingFetch(`http://127.0.0.1:${port}`));
     const error = result.isRejected ? result.reason : null;
+
     expect(error).toBeInstanceOf(FetchError);
     expect((error as FetchError).status).toBe(400);
+
     server.close();
   });
 });

@@ -19,7 +19,9 @@ describe('withHeaders', () => {
 
     const { port } = server.address() as AddressInfo;
     const res = await fetchWithHeaders(`http://127.0.0.1:${port}`);
+
     await expect(res.text()).resolves.toBe('bar');
+
     server.close();
   });
 
@@ -37,7 +39,9 @@ describe('withHeaders', () => {
 
     const { port } = server.address() as AddressInfo;
     const res = await fetchWithExtraHeaders(`http://127.0.0.1:${port}`, { headers: { id: 'id', bar: 'bar' } });
+
     await expect(res.json()).resolves.toStrictEqual({ id: 'override', bar: 'bar', foo: 'foo' });
+
     server.close();
   });
 
@@ -52,7 +56,9 @@ describe('withHeaders', () => {
     await waitForServer(server);
     const { port } = server.address() as AddressInfo;
     const res = await fetchWithAsyncHeaders(`http://127.0.0.1:${port}`, { headers: { id: 'id', bar: 'bar' } });
+
     await expect(res.json()).resolves.toStrictEqual({ id: 'override', bar: 'bar', foo: 'foo' });
+
     server.close();
   });
 
@@ -68,7 +74,9 @@ describe('withHeaders', () => {
     const headers = new Headers({ bar: 'baz' });
     const fetchWithHeadersInstance = withHeaders(fetch, () => ({ foo: 'bar' }));
     const res = await fetchWithHeadersInstance(`http://127.0.0.1:${port}`, { headers });
+
     await expect(res.json()).resolves.toStrictEqual({ foo: 'bar', bar: 'baz' });
+
     server.close();
   });
 
@@ -84,7 +92,9 @@ describe('withHeaders', () => {
     const headers = new Headers({ bar: 'baz' });
     const fetchWithHeadersInstance = withHeaders(fetch, () => new Headers({ foo: 'bar' }));
     const res = await fetchWithHeadersInstance(`http://127.0.0.1:${port}`, { headers });
+
     await expect(res.json()).resolves.toStrictEqual({ foo: 'bar', bar: 'baz' });
+
     server.close();
   });
 
@@ -100,7 +110,9 @@ describe('withHeaders', () => {
     const headers = new Headers({ bar: 'baz' });
     const fetchWithHeadersInstance = withHeaders(fetch, () => new Headers({ foo: 'bar' }));
     const res = await fetchWithHeadersInstance(`http://127.0.0.1:${port}`, { headers });
+
     await expect(res.json()).resolves.toStrictEqual({ foo: 'bar', bar: 'baz' });
+
     server.close();
   });
 
@@ -118,7 +130,9 @@ describe('withHeaders', () => {
     });
     const fetchWithHeadersInstance = withHeaders(fetch, () => ({ foo: 'foo', bar: 'override-bar' }));
     const res = await fetchWithHeadersInstance(request);
+
     await expect(res.json()).resolves.toStrictEqual({ foo: 'foo', bar: 'override-bar', baz: 'baz' });
+
     server.close();
   });
 });

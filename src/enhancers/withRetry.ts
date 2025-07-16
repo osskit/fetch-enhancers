@@ -23,7 +23,8 @@ export const withRetry =
     return retry(
       async (_bail, attempt) => {
         const isRetry = attempt < (finalOptions.retries ?? 3);
-        const response = await fetch(url, init);
+        const request = url instanceof Request ? url.clone() : url;
+        const response = await fetch(request, init);
 
         if (!finalOptions.shouldRetry(response) || !isRetry) {
           return response;

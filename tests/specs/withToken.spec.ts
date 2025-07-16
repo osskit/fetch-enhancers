@@ -18,6 +18,7 @@ describe('withToken', () => {
     const { port } = server.address() as AddressInfo;
     const fetchWithToken = withToken(() => 'mytoken', fetch);
     const res = await fetchWithToken(`http://127.0.0.1:${port}`);
+
     await expect(res.text()).resolves.toBe('{"authorization":"Bearer mytoken"}');
   });
 
@@ -35,7 +36,9 @@ describe('withToken', () => {
     const headers = new Headers({ foo: 'bar' });
     const fetchWithToken = withToken(() => 'mytoken', fetch);
     const res = await fetchWithToken(`http://127.0.0.1:${port}`, { headers });
+
     await expect(res.text()).resolves.toBe('{"authorization":"Bearer mytoken","foo":"bar"}');
+
     server.close();
   });
 });
